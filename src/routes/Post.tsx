@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 
 const Container = styled.div`
@@ -105,12 +105,20 @@ interface RouteState {
 function Post() {
   const params = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
+  const history = useHistory();
   return (
     <Container>
       <Helmet>
         <title>{state.title}</title>
       </Helmet>
       <Header>
+        <button
+          onClick={() => {
+            history.goBack();
+          }}
+        >
+          &larr; back
+        </button>
         <Title></Title>
       </Header>
       <MainPost>

@@ -50,6 +50,12 @@ const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
 interface IPosts {
   isSuccess: boolean;
   code: number;
@@ -73,33 +79,33 @@ interface RouteParams {
   bno: string;
 }
 
-/* const posts = {
+/*const data = {
   isSuccess: true,
   code: 200,
   message: "성공",
   result: [
     {
       pno: 1,
-      name: "anonymous",
-      id: "abcde",
+      bno: 1,
+      userId: "anonymous",
       title: "학교 가기 싫은 중대생이면 개추 ㅋㅋ",
-      content: "ㅋㅋㅋㅋ",
+      pContent: "ㅋㅋㅋㅋ",
       date: "23/08/14 - 20:52",
       postLikeCount: 10,
       replyCount: 5,
     },
     {
       pno: 2,
-      name: "anonymous",
-      id: "fbi",
+      bno: 1,
+      userId: "anonymous",
       title: "hello",
-      content: "ㅋㅋㅋㅋ",
+      pContent: "ㅋㅋㅋㅋ",
       date: "23/08/14 - 20:52",
       postLikeCount: 0,
       replyCount: 0,
     },
   ],
-}; */
+};*/
 
 function Posts() {
   const param = useParams<RouteParams>();
@@ -116,7 +122,11 @@ function Posts() {
       <Header>
         <Link to="/">&larr; back</Link>
         <Title>{state.name}</Title>
-        <button>로그아웃</button>
+        <Buttons>
+          <button>로그아웃</button>
+          <button>글 검색</button>
+          <button>글 쓰기</button>
+        </Buttons>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
