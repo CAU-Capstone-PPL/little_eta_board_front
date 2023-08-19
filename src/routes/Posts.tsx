@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { Helmet } from "react-helmet";
 import PostComponent from "../components/PostComponent";
@@ -113,6 +113,7 @@ function Posts() {
   const { isLoading, data } = useQuery<IPosts>("allPosts", () =>
     fetchPosts(Number(param.bno))
   );
+  const history = useHistory();
 
   return (
     <Container>
@@ -125,7 +126,9 @@ function Posts() {
         <Buttons>
           <button>로그아웃</button>
           <button>글 검색</button>
-          <button>글 쓰기</button>
+          <button onClick={() => history.push(`/board=${param.bno}/write`)}>
+            글 쓰기
+          </button>
         </Buttons>
       </Header>
       {isLoading ? (
