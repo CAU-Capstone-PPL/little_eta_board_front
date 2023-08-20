@@ -2,6 +2,8 @@ import { Helmet } from "react-helmet";
 import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
+import { useMutation } from "react-query";
+import { createPost } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -55,17 +57,33 @@ interface IForm {
   title: string;
   content: string;
 }
+interface RouteParams {
+  bno: string;
+}
 
 function Write() {
+  const param = useParams<RouteParams>();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>();
-  const onValid = (data: any) => {
+  const mutation = useMutation((postData: IForm) => {
+    return createPost(
+      {
+        userId: "exampleUserId", // Replace with the actual userId
+        title: postData.title,
+        content: postData.content,
+      },
+      parseInt(param.bno)
+    );
+  });
+  const history = useHistory();
+  const onValid = (data: IForm) => {
+    mutation.mutate(data);
     history.goBack();
   };
-  const history = useHistory();
+
   return (
     <Container>
       <Helmet>

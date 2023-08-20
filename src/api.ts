@@ -1,5 +1,10 @@
 import axios from "axios";
 
+interface IPost {
+  userId: string;
+  title: string;
+  content: string;
+}
 const BASE_URL = `http://43.201.107.181/api`;
 
 export const fetchBoard = async () => {
@@ -13,4 +18,8 @@ export const fetchPosts = async (bno: number) => {
   return await axios
     .get(`${BASE_URL}/board/category/${bno}`)
     .then((res) => res.data);
+};
+
+export const createPost = async (postData: IPost, bno: number) => {
+  return await axios.post(`${BASE_URL}/post/write?category=${bno}`, postData);
 };
