@@ -16,10 +16,30 @@ export const fetchBoard = async () => {
 export const fetchPosts = async (bno: number) => {
   // axios.get(url).then(res => console.log(res.data))
   return await axios
-    .get(`${BASE_URL}/board/category/${bno}`)
+    .get(`${BASE_URL}/board?category=${bno}&keyword=test`)
+    .then((res) => res.data);
+};
+
+export const fetchPost = async (bno: number, pno: number) => {
+  return await axios
+    .get(`${BASE_URL}/post?category=${bno}&pno=${pno}`)
     .then((res) => res.data);
 };
 
 export const createPost = async (postData: IPost, bno: number) => {
-  return await axios.post(`${BASE_URL}/post/write?category=${bno}`, postData);
+  return await axios
+    .post(`${BASE_URL}/post/write?category=${bno}`, postData)
+    .then((res) => res.data);
+};
+
+export const updatePost = async (postData: IPost, bno: number, pno: number) => {
+  return await axios
+    .patch(`${BASE_URL}/post/edit?category=${bno}&pno=${pno}`, postData)
+    .then((res) => res.data);
+};
+
+export const deletePost = async (bno: number, pno: number) => {
+  return await axios
+    .delete(`${BASE_URL}/post?category=${bno}&pno=${pno}`)
+    .then((res) => res.data);
 };

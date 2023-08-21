@@ -28,23 +28,6 @@ const PostList = styled.div`
   flex-direction: column;
 `;
 
-const Post = styled.li`
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => props.theme.cardBgColor};
-  color: ${(props) => props.theme.textColor};
-  border-radius: 15px;
-  margin-bottom: 10px;
-  border: 1px solid white;
-  padding: 10px 20px;
-`;
-
-const Img = styled.img`
-  width: 35px;
-  height: 35px;
-  margin-right: 10px;
-`;
-
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
@@ -70,6 +53,8 @@ interface IPost {
   userId: string;
   pContent: string;
   date: string;
+  replyCount: number;
+  likeCount: number;
 }
 
 interface RouteState {
@@ -78,34 +63,6 @@ interface RouteState {
 interface RouteParams {
   bno: string;
 }
-
-/*const data = {
-  isSuccess: true,
-  code: 200,
-  message: "성공",
-  result: [
-    {
-      pno: 1,
-      bno: 1,
-      userId: "anonymous",
-      title: "학교 가기 싫은 중대생이면 개추 ㅋㅋ",
-      pContent: "ㅋㅋㅋㅋ",
-      date: "23/08/14 - 20:52",
-      postLikeCount: 10,
-      replyCount: 5,
-    },
-    {
-      pno: 2,
-      bno: 1,
-      userId: "anonymous",
-      title: "hello",
-      pContent: "ㅋㅋㅋㅋ",
-      date: "23/08/14 - 20:52",
-      postLikeCount: 0,
-      replyCount: 0,
-    },
-  ],
-};*/
 
 function Posts() {
   const param = useParams<RouteParams>();
@@ -144,8 +101,8 @@ function Posts() {
               title={post.title}
               pContent={post.pContent}
               date={post.date}
-              postLikeCount={10}
-              replyCount={20}
+              likeCount={post.likeCount}
+              replyCount={post.replyCount}
             ></PostComponent>
           ))}
         </PostList>

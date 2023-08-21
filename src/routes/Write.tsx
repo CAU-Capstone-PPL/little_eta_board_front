@@ -71,7 +71,7 @@ function Write() {
   const mutation = useMutation((postData: IForm) => {
     return createPost(
       {
-        userId: "exampleUserId", // Replace with the actual userId
+        userId: "manleKim", // Replace with the actual userId
         title: postData.title,
         content: postData.content,
       },

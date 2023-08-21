@@ -1,6 +1,8 @@
 import { Helmet } from "react-helmet";
-import { Link, useHistory, useLocation, useParams } from "react-router-dom";
+import { useMutation } from "react-query";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { styled } from "styled-components";
+import { deletePost } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -89,6 +91,10 @@ const PostComment = styled.div`
   color: skyblue;
 `;
 
+const Buttons = styled.div`
+  margin: 10px;
+`;
+
 interface RouteParams {
   bno: string;
   pno: string;
@@ -99,13 +105,20 @@ interface RouteState {
   title: string;
   pContent: string;
   date: string;
-  postLikeCount: number;
+  likeCount: number;
   replyCount: number;
 }
 function Post() {
   const params = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
+  const mutation = useMutation(() => {
+    return deletePost(parseInt(params.bno), parseInt(params.pno));
+  });
   const history = useHistory();
+  const onDelete = () => {
+    mutation.mutate();
+    history.goBack();
+  };
   return (
     <Container>
       <Helmet>
@@ -134,9 +147,19 @@ function Post() {
           <div>{state.pContent}</div>
         </PostContent>
         <PostCount>
-          <PostLike>좋아요: 12</PostLike>
-          <PostComment>댓글 수: 14</PostComment>
+          <PostLike>좋아요: {state.likeCount}</PostLike>
+          <PostComment>댓글 수: {state.replyCount}</PostComment>
         </PostCount>
+        <Buttons>
+          <button
+            onClick={() =>
+              history.push(`/board=${params.bno}/pno=${params.pno}/update`)
+            }
+          >
+            글 수정
+          </button>
+          <button onClick={onDelete}>글 삭제</button>
+        </Buttons>
       </MainPost>
     </Container>
   );

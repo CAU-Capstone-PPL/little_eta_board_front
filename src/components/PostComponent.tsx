@@ -48,7 +48,7 @@ interface IPostComponent {
   title: string;
   pContent: string;
   date: string;
-  postLikeCount: number;
+  likeCount: number;
   replyCount: number;
 }
 
@@ -59,7 +59,7 @@ function PostComponent({
   title,
   pContent,
   date,
-  postLikeCount,
+  likeCount,
   replyCount,
 }: IPostComponent) {
   return (
@@ -72,7 +72,7 @@ function PostComponent({
             title: title,
             pContent: pContent,
             date: date,
-            postLikeCount: postLikeCount,
+            likeCount: likeCount,
             replyCount: replyCount,
           },
         }}
@@ -82,7 +82,7 @@ function PostComponent({
           <p>{pContent}</p>
         </PostContent>
         <PostInfo>
-          <PostInfoElement color="red">좋아요: {postLikeCount}</PostInfoElement>
+          <PostInfoElement color="red">좋아요: {likeCount}</PostInfoElement>
           <PostInfoElement color="skyblue">댓글: {replyCount}</PostInfoElement>
           <PostInfoElement color="grey">{date}</PostInfoElement>
           <PostInfoElement color="grey">{userId}</PostInfoElement>

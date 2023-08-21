@@ -3,6 +3,7 @@ import Board from "./routes/Board";
 import Posts from "./routes/Posts";
 import Post from "./routes/Post";
 import Write from "./routes/Write";
+import Update from "./routes/Update";
 
 function Router() {
   return (
@@ -10,6 +11,9 @@ function Router() {
       <Switch>
         <Route path="/board=:bno/write">
           <Write />
+        </Route>
+        <Route path="/board=:bno/pno=:pno/update">
+          <Update />
         </Route>
         <Route path="/board=:bno/pno=:pno">
           <Post />
