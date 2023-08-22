@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import { deletePost } from "../api";
+import { deletePost, fetchPost } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -100,17 +100,39 @@ interface RouteParams {
   pno: string;
 }
 
-interface RouteState {
-  userId: string;
+interface IPost {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  result: IResult;
+}
+
+interface IResult {
+  name: string;
+  id: string;
   title: string;
-  pContent: string;
+  content: string;
   date: string;
-  likeCount: number;
+  postLikeCount: number;
   replyCount: number;
+  postLikeClick: boolean;
+  reply: IReplys[];
+}
+
+interface IReplys {
+  pno: number;
+  name: string;
+  id: string;
+  content: string;
+  date: string;
+  replyLikeCount: number;
+  replyLikeClick: boolean;
 }
 function Post() {
   const params = useParams<RouteParams>();
-  const { state } = useLocation<RouteState>();
+  const { isLoading, data } = useQuery<IPost>("post", () =>
+    fetchPost(Number(params.bno), Number(params.pno))
+  );
   const mutation = useMutation(() => {
     return deletePost(parseInt(params.bno), parseInt(params.pno));
   });
@@ -119,7 +141,7 @@ function Post() {
     mutation.mutate();
     history.goBack();
   };
-  return (
+  return null /*
     <Container>
       <Helmet>
         <title>{state.title}</title>
@@ -161,8 +183,7 @@ function Post() {
           <button onClick={onDelete}>글 삭제</button>
         </Buttons>
       </MainPost>
-    </Container>
-  );
+    </Container>*/;
 }
 
 export default Post;

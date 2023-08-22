@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import { createPost } from "../api";
+import Navbar from "../components/Navbar";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -89,6 +90,7 @@ function Write() {
       <Helmet>
         <title>글 쓰기</title>
       </Helmet>
+      <Navbar backURL="/board={}" />
       <Header>
         <Title>글 쓰기</Title>
         <button onClick={() => history.goBack()}>&larr; back</button>

@@ -67,14 +67,6 @@ function PostComponent({
       <Link
         to={{
           pathname: `/board=${bno}/pno=${pno}`,
-          state: {
-            userId: userId,
-            title: title,
-            pContent: pContent,
-            date: date,
-            likeCount: likeCount,
-            replyCount: replyCount,
-          },
         }}
       >
         <PostContent>
