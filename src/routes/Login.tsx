@@ -71,16 +71,23 @@ function Login() {
 
   const mutation = useMutation((postData: ILogin) => {
     return login(
-      postData.userId,
-      postData.userPw
+      {
+        userId: postData.userId,
+        userPw: postData.userPw
+      }
     );
+  }, {
+    onSuccess: (data) => {
+      const token = data.result.jwt;
+      localStorage.setItem('token', token);
+    },
+    onError: (data) => {
+      console.log(data);
+    }
   });
 
   const onValid = (data: ILogin) => {
-    const loginResponse = mutation.mutate(data);
-    console.log("Test");
-    console.log(data);
-    console.log(loginResponse);
+    mutation.mutate(data);
   };
 
   return (
