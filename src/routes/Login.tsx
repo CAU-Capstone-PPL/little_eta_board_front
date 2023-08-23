@@ -116,6 +116,9 @@ function Login() {
       </Helmet>
       <Header>
         <Title>로그인</Title>
+        <button type="button" onClick={() => {
+          history.push('/user/signUp');
+        }}>회원가입</button>
       </Header>
       <WriteForm onSubmit={handleSubmit(onValid)}>
         <Input>

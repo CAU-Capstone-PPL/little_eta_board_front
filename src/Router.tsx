@@ -6,6 +6,7 @@ import Write from "./routes/Write";
 import Update from "./routes/Update";
 import Search from "./routes/Search";
 import Login from "./routes/Login";
+import SignUp from "./routes/SignUp";
 
 function Router() {
   return (
@@ -28,6 +29,9 @@ function Router() {
         </Route>
         <Route path="/user/login">
           <Login />
+        </Route>
+        <Route path="/user/signUp">
+          <SignUp />
         </Route>
         <Route path="/">
           <Board />
