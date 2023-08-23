@@ -4,7 +4,7 @@ import {Helmet} from "react-helmet";
 import {login} from "../api";
 import {useForm} from "react-hook-form";
 import {useHistory} from "react-router-dom";
-import { isLoginAtom } from "../atoms";
+import {isLoginAtom, userIdAtom, userNameAtom} from "../atoms";
 import {useRecoilState} from "recoil";
 
 const Container = styled.div`
@@ -67,6 +67,8 @@ interface ILogin {
 
 function Login() {
   const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);
+  const [userId, setUserId] = useRecoilState(userIdAtom);
+  const [userName, setUserName] = useRecoilState(userNameAtom);
 
   const {
     register,
@@ -85,7 +87,11 @@ function Login() {
     onSuccess: (data) => {
       const token = data.result.Authorization;
       localStorage.setItem('token', token);
+
       setIsLogin(true);
+      setUserId(data.result.userId);
+      setUserName(data.result.userName);
+
       history.push(`/`);
     },
     onError: (data) => {

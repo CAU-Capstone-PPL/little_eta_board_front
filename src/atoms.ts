@@ -8,6 +8,16 @@ export const isLoginAtom = atom({
   default: false,
 });
 
+export const userIdAtom = atom({
+  key: "userId",
+  default: null,
+});
+
+export const userNameAtom = atom({
+  key: "userName",
+  default: null,
+});
+
 export const isDarkAtom = atom({
   key: "isDark",
   default: false,
