@@ -3,6 +3,9 @@ import {styled} from "styled-components";
 import {Helmet} from "react-helmet";
 import {login} from "../api";
 import {useForm} from "react-hook-form";
+import {useHistory} from "react-router-dom";
+import { isLoginAtom } from "../atoms";
+import {useRecoilState} from "recoil";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -63,6 +66,8 @@ interface ILogin {
 }
 
 function Login() {
+  const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);
+
   const {
     register,
     handleSubmit,
@@ -78,17 +83,25 @@ function Login() {
     );
   }, {
     onSuccess: (data) => {
-      const token = data.result.jwt;
+      const token = data.result.Authorization;
       localStorage.setItem('token', token);
+      setIsLogin(true);
+      history.push(`/`);
     },
     onError: (data) => {
       console.log(data);
     }
   });
 
+  const history = useHistory();
+
   const onValid = (data: ILogin) => {
     mutation.mutate(data);
   };
+
+  if(isLogin) {
+    history.push('/');
+  }
 
   return (
     <Container>
