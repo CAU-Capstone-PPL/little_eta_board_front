@@ -112,7 +112,7 @@ function Login() {
   return (
     <Container>
       <Helmet>
-        <title>로그인 페이지</title>
+        <title>로그인</title>
       </Helmet>
       <Header>
         <Title>로그인</Title>

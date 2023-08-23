@@ -74,3 +74,15 @@ export const login = async (postData: ILogin) => {
     .post(`${BASE_URL}/user/login`, postData)
     .then((res) => res.data);
 };
+
+export const signUp = async (postData: ILogin) => {
+  return await axios
+    .post(`${BASE_URL}/user/signUp`, postData)
+    .then((res) => res.data);
+};
+
+export const duplicateCheck = async (postData: IUser) => {
+  return await axios
+    .post(`${BASE_URL}/user/duplicate`, postData)
+    .then((res) => res.data);
+}
