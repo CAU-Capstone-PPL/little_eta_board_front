@@ -1,8 +1,8 @@
-import { useQuery } from "react-query";
-import {Link} from "react-router-dom";
+import {useMutation} from "react-query";
 import {styled} from "styled-components";
 import {Helmet} from "react-helmet";
-import {fetchBoard} from "../api";
+import {login} from "../api";
+import {useForm} from "react-hook-form";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -21,64 +21,67 @@ const Header = styled.header`
   }
 `;
 
-const Buttons = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  width: 33%;
-  button {
-    padding: 7px 15px;
-    border-radius: 10px;
-  }
-`;
-
-const Loader = styled.span`
-  text-align: center;
-  display: block;
-`;
-
-const LoginList = styled.ul``;
-
-const Logins = styled.li`
-  background-color: ${(props) => props.theme.cardBgColor};
-  color: ${(props) => props.theme.textColor};
-  border-radius: 15px;
-  margin-bottom: 10px;
-  border: 1px solid white;
-  a {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    transition: color 0.2s ease-in;
-  }
-  &:hover {
-    a {
-      color: ${(props) => props.theme.accentColor};
-    }
-  }
-`;
-
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
   width: 33%;
 `;
 
-interface ILogins {
-  isSuccess: boolean;
-  code: number;
-  message: string;
-  result: ILogin[];
-}
+const WriteForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
+  border-radius: 15px;
+  margin-bottom: 10px;
+  padding: 20px;
+  border: 1px solid white;
+  gap: 15px;
+`;
+
+const Input = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-weight: 400;
+  }
+
+  span {
+    color: ${(props) => props.theme.accentColor};
+  }
+
+  textarea {
+    height: 300px;
+    resize: vertical;
+  }
+`;
 
 interface ILogin {
-  bno: number;
-  bName: string;
+  userId: string;
+  userPw: string;
 }
 
 function Login() {
-  const { isLoading, data } = useQuery<ILogins>("allBoards", fetchBoard); //파라미터 변경해야 함
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<ILogin>();
+
+  const mutation = useMutation((postData: ILogin) => {
+    return login(
+      postData.userId,
+      postData.userPw
+    );
+  });
+
+  const onValid = (data: ILogin) => {
+    const loginResponse = mutation.mutate(data);
+    console.log("Test");
+    console.log(data);
+    console.log(loginResponse);
+  };
 
   return (
     <Container>
@@ -88,26 +91,21 @@ function Login() {
       <Header>
         <Title>로그인</Title>
       </Header>
-      {isLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <h1>test</h1>
-        /*
-        <LoginList>
-          {data?.result?.map((board) => (
-            <Logins key={board.bno}>
-              <Link
-                to={{
-                  pathname: `/board=${board.bno}`,
-                  state: { name: board.bName },
-                }}
-              >
-                {board.bName} &rarr;
-              </Link>
-            </Logins>
-          ))}
-        </LoginList>*/
-      )}
+      <WriteForm onSubmit={handleSubmit(onValid)}>
+        <Input>
+          <label>아이디</label>
+          <input
+            {...register("userId")}
+          />
+        </Input>
+        <Input>
+          <label>비밀번호</label>
+          <input
+            {...register("userPw")}
+          />
+        </Input>
+        <button>로그인</button>
+      </WriteForm>
     </Container>
   )
 }

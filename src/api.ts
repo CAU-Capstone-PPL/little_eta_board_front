@@ -5,6 +5,7 @@ interface IPost {
   title: string;
   content: string;
 }
+
 const BASE_URL = `http://43.201.107.181/api`;
 
 export const fetchBoard = async () => {
@@ -41,5 +42,11 @@ export const updatePost = async (postData: IPost, bno: number, pno: number) => {
 export const deletePost = async (bno: number, pno: number) => {
   return await axios
     .delete(`${BASE_URL}/post?category=${bno}&pno=${pno}`)
+    .then((res) => res.data);
+};
+
+export const login = async (userId: string, userPw: string) => {
+  return await axios
+    .post('${BASE_URL}/user/login')
     .then((res) => res.data);
 };
