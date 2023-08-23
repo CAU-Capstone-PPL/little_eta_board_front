@@ -29,6 +29,7 @@ const ReplyInfo = styled.div`
   align-items: flex-start;
   gap: 5px;
   button {
+    color: black;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
