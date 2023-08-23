@@ -5,6 +5,15 @@ interface IPost {
   title: string;
   content: string;
 }
+
+interface IUpdate {
+  title: string;
+  content: string;
+}
+
+interface IUser {
+  userId: string;
+}
 const BASE_URL = `http://43.201.107.181/api`;
 
 export const fetchBoard = async () => {
@@ -16,7 +25,7 @@ export const fetchBoard = async () => {
 export const fetchPosts = async (bno: number) => {
   // axios.get(url).then(res => console.log(res.data))
   return await axios
-    .get(`${BASE_URL}/board?category=${bno}&keyword=test`)
+    .get(`${BASE_URL}/board?category=${bno}`)
     .then((res) => res.data);
 };
 
@@ -32,7 +41,11 @@ export const createPost = async (postData: IPost, bno: number) => {
     .then((res) => res.data);
 };
 
-export const updatePost = async (postData: IPost, bno: number, pno: number) => {
+export const updatePost = async (
+  postData: IUpdate,
+  bno: number,
+  pno: number
+) => {
   return await axios
     .patch(`${BASE_URL}/post/edit?category=${bno}&pno=${pno}`, postData)
     .then((res) => res.data);
@@ -41,5 +54,11 @@ export const updatePost = async (postData: IPost, bno: number, pno: number) => {
 export const deletePost = async (bno: number, pno: number) => {
   return await axios
     .delete(`${BASE_URL}/post?category=${bno}&pno=${pno}`)
+    .then((res) => res.data);
+};
+
+export const likePost = async (userId: IUser, bno: number, pno: number) => {
+  return await axios
+    .post(`${BASE_URL}/post/like?category=${bno}&pno=${pno}`, userId)
     .then((res) => res.data);
 };

@@ -38,7 +38,7 @@ const PostInfo = styled.div`
 `;
 const PostInfoElement = styled.div`
   font-size: 14px;
-  color: ${(props) => props.color || "white"};
+  color: ${(props) => props.theme.textColor};
 `;
 
 interface IPostComponent {

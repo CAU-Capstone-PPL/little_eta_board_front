@@ -59,7 +59,7 @@ const Input = styled.div`
   }
 `;
 interface IForm {
-  userId: string;
+  //userId: string;
   title: string;
   content: string;
 }
@@ -94,10 +94,9 @@ function Update() {
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>();
-  const mutation = useMutation((postData: IForm) => {
+  const updatePostMutation = useMutation((postData: IForm) => {
     return updatePost(
       {
-        userId: "keylime7",
         title: postData.title,
         content: postData.content,
       },
@@ -106,9 +105,9 @@ function Update() {
     );
   });
   const history = useHistory();
-  const onValid = (data: IForm) => {
-    mutation.mutate(data);
-    history.goBack();
+  const onValid = async (data: IForm) => {
+    await updatePostMutation.mutateAsync(data);
+    history.push(`/board=${params.bno}/pno=${params.pno}`);
   };
 
   return (

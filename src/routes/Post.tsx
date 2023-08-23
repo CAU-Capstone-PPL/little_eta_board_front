@@ -1,8 +1,10 @@
 import { Helmet } from "react-helmet";
 import { useMutation, useQuery } from "react-query";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { styled } from "styled-components";
-import { deletePost, fetchPost } from "../api";
+import { deletePost, fetchPost, likePost } from "../api";
+import Navbar from "../components/Navbar";
+import ReplyComponent from "../components/ReplyComponent";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -14,7 +16,12 @@ const Header = styled.header`
   height: 15vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+`;
+
+const Loader = styled.span`
+  text-align: center;
+  display: block;
 `;
 
 const Title = styled.h1`
@@ -95,31 +102,39 @@ const Buttons = styled.div`
   margin: 10px;
 `;
 
+const ReplyList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 interface RouteParams {
   bno: string;
   pno: string;
+}
+
+interface IUser {
+  userId: string;
 }
 
 interface IPost {
   isSuccess: boolean;
   code: number;
   message: string;
-  result: IResult;
+  result: IResult[];
 }
 
 interface IResult {
-  name: string;
-  id: string;
+  pno: number;
+  bno: number;
   title: string;
-  content: string;
+  userId: string;
+  pContent: string;
   date: string;
-  postLikeCount: number;
   replyCount: number;
-  postLikeClick: boolean;
-  reply: IReplys[];
+  likeCount: boolean;
 }
 
-interface IReplys {
+/*interface IReplys {
   pno: number;
   name: string;
   id: string;
@@ -127,63 +142,85 @@ interface IReplys {
   date: string;
   replyLikeCount: number;
   replyLikeClick: boolean;
-}
+}*/
+
 function Post() {
   const params = useParams<RouteParams>();
   const { isLoading, data } = useQuery<IPost>("post", () =>
     fetchPost(Number(params.bno), Number(params.pno))
   );
-  const mutation = useMutation(() => {
+  const history = useHistory();
+
+  const deletePostMutation = useMutation(() => {
     return deletePost(parseInt(params.bno), parseInt(params.pno));
   });
-  const history = useHistory();
-  const onDelete = () => {
-    mutation.mutate();
-    history.goBack();
+
+  const onDeletePost = async () => {
+    await deletePostMutation.mutate();
+    history.push(`/board=${params.bno}`);
   };
-  return null /*
+
+  const likePostMutation = useMutation((likeUser: IUser) => {
+    return likePost(
+      { userId: "manleKim" },
+      parseInt(params.bno),
+      parseInt(params.pno)
+    );
+  });
+
+  const onLikePost = async (likeUser: IUser) => {
+    await likePostMutation.mutate(likeUser);
+    history.push(`/board=${params.bno}/pno=${params.pno}`);
+  };
+
+  return (
     <Container>
       <Helmet>
-        <title>{state.title}</title>
+        <title>게시글 페이지</title>
       </Helmet>
+      <Navbar backURL={`/board=${params.bno}`} />
       <Header>
-        <button
-          onClick={() => {
-            history.goBack();
-          }}
-        >
-          &larr; back
-        </button>
-        <Title></Title>
+        <Title>{data?.result[0].title}</Title>
       </Header>
-      <MainPost>
-        <PostUser>
-          <Img src="https://picsum.photos/200/300​" alt="No image" />
-          <UserDate>
-            <h2>{state.userId}</h2>
-            <div>{state.date}</div>
-          </UserDate>
-        </PostUser>
-        <PostContent>
-          <h1>{state.title}</h1>
-          <div>{state.pContent}</div>
-        </PostContent>
-        <PostCount>
-          <PostLike>좋아요: {state.likeCount}</PostLike>
-          <PostComment>댓글 수: {state.replyCount}</PostComment>
-        </PostCount>
-        <Buttons>
-          <button
-            onClick={() =>
-              history.push(`/board=${params.bno}/pno=${params.pno}/update`)
-            }
-          >
-            글 수정
-          </button>
-          <button onClick={onDelete}>글 삭제</button>
-        </Buttons>
-      </MainPost>
-    </Container>*/;
+      {isLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <MainPost>
+            <PostUser>
+              <Img src="https://picsum.photos/200​​" alt="No image" />
+              <UserDate>
+                <h2>{data?.result[0].userId}</h2>
+                <div>{data?.result[0].date}</div>
+              </UserDate>
+            </PostUser>
+            <PostContent>
+              <h1>{data?.result[0].title}</h1>
+              <div>{data?.result[0].pContent}</div>
+            </PostContent>
+            <PostCount>
+              <PostLike>좋아요: {data?.result[0].likeCount}</PostLike>
+              <PostComment>댓글 수: {data?.result[0].replyCount}</PostComment>
+            </PostCount>
+            <Buttons>
+              <button
+                onClick={() =>
+                  history.push(`/board=${params.bno}/pno=${params.pno}/update`)
+                }
+              >
+                글 수정
+              </button>
+              <button onClick={onDeletePost}>글 삭제</button>
+              <button>좋아요</button>
+            </Buttons>
+          </MainPost>
+          <ReplyList>
+            <ReplyComponent />
+          </ReplyList>
+        </>
+      )}
+    </Container>
+  );
 }
 
 export default Post;

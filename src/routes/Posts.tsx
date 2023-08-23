@@ -72,10 +72,12 @@ interface IPosts {
   isSuccess: boolean;
   code: number;
   message: string;
+  bName: string;
   result: IPost[];
 }
 
 interface IPost {
+  bName: string;
   pno: number;
   bno: number;
   title: string;
@@ -86,9 +88,6 @@ interface IPost {
   likeCount: number;
 }
 
-interface RouteState {
-  name: string;
-}
 interface RouteParams {
   bno: string;
 }
@@ -99,7 +98,6 @@ interface IForm {
 
 function Posts() {
   const param = useParams<RouteParams>();
-  const { state } = useLocation<RouteState>();
   const { isLoading, data } = useQuery<IPosts>("allPosts", () =>
     fetchPosts(Number(param.bno))
   );
@@ -113,10 +111,10 @@ function Posts() {
     <Container>
       <Navbar backURL="/" />
       <Helmet>
-        <title>{state.name}</title>
+        <title>{data?.bName}</title>
       </Helmet>
       <Header>
-        <Title>{state.name}</Title>
+        <Title>{data?.bName}</Title>
         <Buttons>
           <button>로그아웃</button>
           <button onClick={() => history.push(`/board=${param.bno}/write`)}>

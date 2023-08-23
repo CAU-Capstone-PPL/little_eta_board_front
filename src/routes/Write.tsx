@@ -69,7 +69,7 @@ function Write() {
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>();
-  const mutation = useMutation((postData: IForm) => {
+  const createPostMutation = useMutation((postData: IForm) => {
     return createPost(
       {
         userId: "manleKim", // Replace with the actual userId
@@ -80,9 +80,9 @@ function Write() {
     );
   });
   const history = useHistory();
-  const onValid = (data: IForm) => {
-    mutation.mutate(data);
-    history.goBack();
+  const onValid = async (data: IForm) => {
+    await createPostMutation.mutateAsync(data);
+    history.push(`/board=${param.bno}`);
   };
 
   return (
