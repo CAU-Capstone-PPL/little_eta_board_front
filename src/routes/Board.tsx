@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { isDarkAtom, isLoginAtom } from "../atoms";
 import { fetchBoard } from "../api";
+import UserInfo from "../components/UserInfo";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -114,6 +115,7 @@ function Board() {
 
   return (
     <Container>
+      <UserInfo />
       <button onClick={toggleLoginAtom}>
         {isLogin ? "로그인 상태" : "로그아웃 상태"}
       </button>
