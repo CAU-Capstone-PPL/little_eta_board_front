@@ -5,6 +5,7 @@ import Post from "./routes/Post";
 import Write from "./routes/Write";
 import Update from "./routes/Update";
 import Search from "./routes/Search";
+import Login from "./routes/Login";
 
 function Router() {
   return (
@@ -24,6 +25,9 @@ function Router() {
         </Route>
         <Route path="/board=:bno">
           <Posts />
+        </Route>
+        <Route path="/user/login">
+          <Login />
         </Route>
         <Route path="/">
           <Board />
