@@ -20,6 +20,12 @@ interface ILogin {
   userPw: string;
 }
 
+interface ISignUp {
+  userId: string;
+  userPw: string;
+  userName: string;
+}
+
 const BASE_URL = `http://43.201.107.181/api`;
 
 export const fetchBoard = async () => {
@@ -75,7 +81,7 @@ export const login = async (postData: ILogin) => {
     .then((res) => res.data);
 };
 
-export const signUp = async (postData: ILogin) => {
+export const signUp = async (postData: ISignUp) => {
   return await axios
     .post(`${BASE_URL}/user/signUp`, postData)
     .then((res) => res.data);

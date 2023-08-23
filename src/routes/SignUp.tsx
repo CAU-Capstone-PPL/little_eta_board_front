@@ -4,6 +4,7 @@ import {useForm} from "react-hook-form";
 import {useMutation} from "react-query";
 import {duplicateCheck, login, signUp} from "../api";
 import {useState} from "react";
+import {useHistory} from "react-router-dom";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -62,31 +63,40 @@ interface ILogin {
   userPw: string;
 }
 
-interface IUser {
+interface ISignUp {
   userId: string;
+  userPw: string;
+  userName: string;
 }
 
 function SignUp() {
   const [userId, setUserId] = useState("");
   const [duplicateStatus, setDuplicateStatus] = useState(true);
+  const history = useHistory();
 
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<ILogin>();
+  } = useForm<ISignUp>();
 
-  const mutation = useMutation((postData: ILogin) => {
+  const mutation = useMutation((postData: ISignUp) => {
     return signUp(
       {
         userId: postData.userId,
-        userPw: postData.userPw
+        userPw: postData.userPw,
+        userName: postData.userName
       }
     );
+  }, {
+    onSuccess: () => {
+      history.push(`/user/login`);
+    }
   });
-  const onValid = (data: ILogin) => {
+  const onValid = (data: ISignUp) => {
     mutation.mutate(data);
   };
+
 
   const duplicateCheckMutation = useMutation((postData: string) => {
     return duplicateCheck(
@@ -143,6 +153,12 @@ function SignUp() {
           <label>비밀번호</label>
           <input
             {...register("userPw")}
+          />
+        </Input>
+        <Input>
+          <label>닉네임</label>
+          <input
+            {...register("userName")}
           />
         </Input>
         {componentButton}
