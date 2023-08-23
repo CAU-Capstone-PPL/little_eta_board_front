@@ -68,7 +68,7 @@ interface IUser {
 
 function SignUp() {
   const [userId, setUserId] = useState("");
-  const [duplicateStatus, setDuplicateStatus] = useState(false);
+  const [duplicateStatus, setDuplicateStatus] = useState(true);
 
   const {
     register,
@@ -96,13 +96,20 @@ function SignUp() {
     );
   }, {
     onSuccess: (data) => {
-      setDuplicateStatus(false);
+      if(data.result.duplicate) {
+        setDuplicateStatus(true);
+        console.log("duplicate");
+      } else {
+        setDuplicateStatus(false);
+        console.log("not duplicate");
+      }
     },
     onError: (data) => {
-      setDuplicateStatus(true);
+      console.log(data);
     }
   });
   const handleDuplicate = () => {
+    console.log("test");
     duplicateCheckMutation.mutate(userId);
   };
 
